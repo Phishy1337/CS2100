@@ -1,17 +1,30 @@
-def nextCombination(values):
-    """
-    for C(5, 3), set starts at {0, 1, 2}, final would be {3, 4, 5}
-    try to increase the 1's digit up to n, so long as item 
-    to the left is less than it.  if not, move to 10's place, etc.
-    """
-    i = len(values) - 1
+def nextCombination(n, values):
+    r = len(values)
+
+    i = r - 1
+    while i >= 0 and values[i] == n - r + i + 1:
+        i -= 1
+
+    if i < 0:
+        return False
+
+    values[i] += 1
+    for j in range(i + 1, r):
+        values[j] = values[j - 1] + 1
+
+    return True
+
 
 def printCombinations(n, r):
-    values = list(range(r))
+    if r > n:
+        return
+
+    values = list(range(1, r + 1))
     print(", ".join(map(str, values)))
 
-    while nextCombination(values):
-        
+    while nextCombination(n, values):
+        print(", ".join(map(str, values)))
+
 
 def getInput(string):
     while True:
@@ -23,9 +36,11 @@ def getInput(string):
             print("N must be an integer.")
             continue
 
-        if not 1 <= value <= 9:
-            print("N must be integer 1 to 9.")
-            continue
-
         return value
 
+
+if __name__ == "__main__":
+    userInputN = getInput("Total size of combinations: ")
+    userInputR = getInput("Number of Picks 1-N: ")
+
+    printCombinations(userInputN, userInputR)
