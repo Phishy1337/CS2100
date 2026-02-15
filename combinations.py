@@ -1,3 +1,29 @@
+class Count:
+    def __init__(self):
+        self.count = 0
+        self.pc = "C"
+        self.n = 0
+        self.r = 0
+
+    def increment(self, n=1):
+        self.count += n
+
+    def setN(self, n):
+        self.n = n
+
+    def setR(self, r):
+        self.r = r
+
+    def printCount(self):
+
+        if self.pc == "P":
+            print(f"\nTotal permutations of {self.pc}({self.n}, {self.n}) is {self.count}\n")
+            
+        if self.pc == "C":
+            print(f"\nTotal combinations of {self.pc}({self.n}, {self.r}) is {self.count}\n")
+        return       
+
+
 def nextCombination(n, values):
     r = len(values)
 
@@ -15,16 +41,22 @@ def nextCombination(n, values):
     return True
 
 
-def printCombinations(n, r):
+def printCombinations(n, r, count=None):
+    if count is None:
+        count = Count()
+
     if r > n:
         return
 
     values = list(range(1, r + 1))
     print(", ".join(map(str, values)))
+    count.increment()
 
     while nextCombination(n, values):
         print(", ".join(map(str, values)))
-
+        count.increment()
+    
+    return count
 
 def getInput(string):
     while True:
@@ -32,7 +64,7 @@ def getInput(string):
 
         try:
             value = int(userInput)
-        except ValueError:
+        except valueError:
             print("N must be an integer.")
             continue
 
@@ -40,7 +72,10 @@ def getInput(string):
 
 
 if __name__ == "__main__":
-    userInputN = getInput("Total size of combinations: ")
-    userInputR = getInput("Number of Picks 1-N: ")
+    n = getInput("total size of combinations: ")
+    r = getInput(f"number of picks 1-{n}: ")
 
-    printCombinations(userInputN, userInputR)
+    count = printCombinations(n, r)
+    count.setN(n)
+    count.setR(r)
+    count.printCount()

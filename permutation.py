@@ -1,3 +1,29 @@
+class Count:
+    def __init__(self):
+        self.count = 0
+        self.pc = "P"
+        self.n = 0
+        self.r = 0
+
+    def increment(self, n=1):
+        self.count += n
+
+    def setN(self, n):
+        self.n = n
+    
+    def setR(self, r):
+        self.r = r
+
+    def printCount(self):
+
+        if self.pc == "P":
+            print(f"\nTotal permutations of {self.pc}({self.n}, {self.n}) is {self.count}\n")
+            
+        if self.pc == "C":
+            print(f"\nTotal combinations of {self.pc}({self.n}, {self.r}) is {self.count}\n")
+        return
+        
+
 def nextPermutation(values):
     i = len(values) - 2
 
@@ -16,12 +42,19 @@ def nextPermutation(values):
     return True
 
 
-def printPermutations(n):
+def printPermutations(n, count=None):
+    if count is None:
+        count = Count()
+
     values = list(range(n))
     print(", ".join(map(str, values)))
+    count.increment()
 
     while nextPermutation(values):
         print(", ".join(map(str, values)))
+        count.increment()
+
+    return count
 
 def getInput(string):
     while True:
@@ -39,9 +72,13 @@ def getInput(string):
 
         return value
 
+
+
 def main():
     n = getInput("Enter N (1-9): ")
-    printPermutations(n)
+    count = printPermutations(n)
+    count.setN(n)
+    count.printCount()
 
 if __name__ == "__main__":
     main()
