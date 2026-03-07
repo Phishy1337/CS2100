@@ -14,6 +14,9 @@ class Count:
     def setR(self, r):
         self.r = r
 
+    def getCount(self):
+        return self.count
+
     def printCount(self):
 
         if self.pc == "P":
@@ -57,6 +60,34 @@ def printCombinations(n, r, count=None):
         count.increment()
     
     return count
+
+def returnCombinations(n, r, count=None):
+    if count is None:
+        count = Count()
+
+    combinations = []
+    if r > n:
+        return
+
+    values = list(range(1, r + 1))
+    combinations.append(values.copy())
+    count.increment()
+
+    while nextCombination(n, values):
+        combinations.append(values.copy())
+        count.increment()
+
+    return count, combinations
+
+def yieldCombinations(n, r, count=None):
+    combinationToYield = []
+
+    values = list(range(1, r + 1))
+    yield values.copy()
+
+    while nextCombination(n, values):
+        yield values.copy()
+
 
 def getInput(string):
     while True:

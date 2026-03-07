@@ -42,6 +42,33 @@ def nextPermutation(values):
     return True
 
 
+def nextPermutationWithRepetition(n, values):
+    i = len(values) - 1
+
+    while i >= 0 and values[i] == n - 1:
+        i -= 1
+
+    if i < 0:
+        return False
+
+    values[i] += 1
+    for j in range(i + 1, len(values)):
+        values[j] = 0
+
+    return True
+
+
+def iterPermutationsWithRepetition(n, r):
+    if r <= 0:
+        return
+
+    values = [0] * r
+    yield values.copy()
+
+    while nextPermutationWithRepetition(n, values):
+        yield values.copy()
+
+
 def printPermutations(n, count=None):
     if count is None:
         count = Count()
