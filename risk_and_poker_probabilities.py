@@ -2,7 +2,7 @@ import random
 from collections import Counter
 
 from combinations import nextCombination
-from permutation import iterPermutationsWithRepetition
+from permutation import returnPermutationsWithRepetition
 
 
 def iter_combinations_indices(n, r):
@@ -130,7 +130,8 @@ def risk_exact_probabilities():
         outcome_counts = Counter()
         total = 0
 
-        for roll in iterPermutationsWithRepetition(6, attacker_dice + defender_dice):
+        _, all_rolls = returnPermutationsWithRepetition(6, attacker_dice + defender_dice)
+        for roll in all_rolls:
             attacker_roll = [v + 1 for v in roll[:attacker_dice]]
             defender_roll = [v + 1 for v in roll[attacker_dice:]]
             outcome = compare_risk_dice(attacker_roll, defender_roll)

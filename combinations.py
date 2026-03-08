@@ -31,7 +31,7 @@ def nextCombination(n, values):
     r = len(values)
 
     i = r - 1
-    while i >= 0 and values[i] == n - r + i + 1:
+    while i >= 0 and values[i] == n - r + i:
         i -= 1
 
     if i < 0:
@@ -51,7 +51,7 @@ def printCombinations(n, r, count=None):
     if r > n:
         return
 
-    values = list(range(1, r + 1))
+    values = list(range(r))
     print(", ".join(map(str, values)))
     count.increment()
 
@@ -69,7 +69,7 @@ def returnCombinations(n, r, count=None):
     if r > n:
         return
 
-    values = list(range(1, r + 1))
+    values = list(range(r))
     combinations.append(values.copy())
     count.increment()
 
@@ -82,7 +82,7 @@ def returnCombinations(n, r, count=None):
 def yieldCombinations(n, r, count=None):
     combinationToYield = []
 
-    values = list(range(1, r + 1))
+    values = list(range(r))
     yield values.copy()
 
     while nextCombination(n, values):
