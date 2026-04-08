@@ -25,4 +25,4 @@ My soldiers RAGE!
 """
 
 rsa.GenerateKeys(string1, string2)
-rsa.encrypt("try_encrypting.txt", "test.txt")
+rsa.encrypt("try_encrypting_long.txt", "test.txt")

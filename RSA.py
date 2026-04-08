@@ -71,13 +71,30 @@ class RSA:
         plainText = plainTextBinary.decode("utf-8")
         fin.close()
 
-    
+        count = 0
+        total_indexes = (len(plainText) + 215) // 216
+        plainTextBlocks = [[] for _ in range(total_indexes)]
+        current_index = 0
+
+        for char in plainText:
+            plainTextBlocks[current_index].append(char)
+            count += 1
+
+            if count == 216:
+                count = 0
+                current_index += 1
+        plainTextBlocks = [''.join(sublist) for sublist in plainTextBlocks]
+        for v in plainTextBlocks:
+            print(v)
+            print("========================================================")
+
         encrypted = toBase(plainText, self.alphabet2)
         with open("public.txt", "r") as fin:
             n = fin.readline().strip()
             e = fin.readline().strip()
 
             encrypted = pow(encrypted, int(e), int(n))
+
 
         encrypted = fromBase(encrypted, self.alphabet2)
             

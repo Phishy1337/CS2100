@@ -106,6 +106,8 @@ if __name__ == "__main__":
     n = getInput("total size of combinations: ")
     r = getInput(f"number of picks 1-{n}: ")
 
+    printCombosOrNot = input("print all combinations? ")
+
     count = printCombinations(n, r)
     count.setN(n)
     count.setR(r)
