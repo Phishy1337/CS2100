@@ -1,7 +1,5 @@
 from RSA import RSA
 
-rsa = RSA()
-
 string1 = """
 Heed my words. I am Malenia, Blade of Miquella, and I have never known defeat
 Heed my words. I am Malenia, Blade of Miquella, and I have never known defeat
@@ -24,5 +22,15 @@ My soldiers scream out!
 My soldiers RAGE!
 """
 
-rsa.GenerateKeys(string1, string2)
-rsa.encrypt("try_encrypting_long.txt", "test.txt")
+
+def main():
+
+    rsa = RSA()
+
+
+    rsa.GenerateKeys(string1, string2)
+
+    rsa.Decrypt("TateEncrypted.txt", "TateDecrypted.txt")
+
+if __name__ == "__main__":
+    main()

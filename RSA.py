@@ -65,14 +65,15 @@ class RSA:
         with open("private.txt", "w") as private:
             private.write(f"{n}\n{d}")
 
-    def encrypt(self, inFile, outFile):
+    def Encrypt(self, inFile, outFile):
         fin = open(inFile, "rb")
         plainTextBinary = fin.read()
         plainText = plainTextBinary.decode("utf-8")
         fin.close()
 
+        plainTextBlockSize = 216
         count = 0
-        total_indexes = (len(plainText) + 215) // 216
+        total_indexes = (len(plainText) + plainTextBlockSize - 1) // plainTextBlockSize
         plainTextBlocks = [[] for _ in range(total_indexes)]
         current_index = 0
 
@@ -80,27 +81,65 @@ class RSA:
             plainTextBlocks[current_index].append(char)
             count += 1
 
-            if count == 216:
+            if count == plainTextBlockSize:
                 count = 0
                 current_index += 1
-        plainTextBlocks = [''.join(sublist) for sublist in plainTextBlocks]
-        for v in plainTextBlocks:
-            print(v)
-            print("========================================================")
 
-        encrypted = toBase(plainText, self.alphabet2)
+        plainTextBlocks = [''.join(sublist) for sublist in plainTextBlocks]
+        toEncrypt = ["" for _ in range(total_indexes)]
+        
         with open("public.txt", "r") as fin:
             n = fin.readline().strip()
             e = fin.readline().strip()
 
-            encrypted = pow(encrypted, int(e), int(n))
-
-
-        encrypted = fromBase(encrypted, self.alphabet2)
-            
         fout = open(outFile, "wb")
-        fout.write(encrypted.encode("utf-8"))
-
-    def decrypt(self, message):
-        return
+        current_index = 0
+        for block in plainTextBlocks:
+            encrypted = pow(toBase(block, self.alphabet2), int(e), int(n))
+            encrypted = fromBase(encrypted, self.alphabet2)
+            toEncrypt[current_index] = encrypted
+            current_index += 1
             
+        
+        for encryptedBlock in toEncrypt:
+            fout.write(f"{encryptedBlock}$".encode("utf-8"))
+
+        fout.close()
+
+    def Decrypt(self, inFile, outFile):
+        fin = open(inFile, "rb")
+        encryptedTextBinary = fin.read()
+        encryptedText = encryptedTextBinary.decode("utf-8")
+        fin.close()
+
+        total_indexes = encryptedText.count("$")
+        encryptedTextBlocks = ["" for _ in range(total_indexes)]
+        current_index = 0
+        current_block = ""
+
+        for char in encryptedText:
+            if char == "$":
+                encryptedTextBlocks[current_index] = current_block
+                current_index += 1
+                current_block = ""
+            else:
+                current_block += char
+
+        toDecrypt = ["" for _ in range(total_indexes)]
+
+        with open("private.txt", "r") as fin:
+            n = fin.readline().strip()
+            d = fin.readline().strip()
+
+        fout = open(outFile, "wb")
+        current_index = 0
+        for block in encryptedTextBlocks:
+            decrypted = pow(toBase(block, self.alphabet2), int(d), int(n))
+            decrypted = fromBase(decrypted, self.alphabet2)
+            toDecrypt[current_index] = decrypted
+            current_index += 1
+            
+        for decryptedBlock in toDecrypt:
+            fout.write(decryptedBlock.encode("utf-8"))
+
+        fout.close()
